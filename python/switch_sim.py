@@ -32,15 +32,18 @@ def depart_refill(N, entries, dest):
         entries[dest[out]] = random.randrange(N)
     return len(dest)
 
-if __name__ == "__main__":
-    N = 4
+def slot_loop(N, slots):
+    total = 0
     entries = hol_dest(N)
-    collected = req_collector(entries)
-    final_dest = arbiter(collected)
-    print(entries)
-    print(collected)
-    print(final_dest)
-    dep_count = depart_refill(N, entries, final_dest)
-    print(entries)
-    print(dep_count)
-    
+    for i in range(slots):
+        collected = req_collector(entries)
+        final_dest = arbiter(collected)
+        total += depart_refill(N, entries, final_dest)
+
+    return total / (N * slots)
+        
+
+if __name__ == "__main__":
+    N = 16
+    slots = 1000
+    print(f"slots: {slots}, N = {N} and throughput = {slot_loop(N, slots)}")
