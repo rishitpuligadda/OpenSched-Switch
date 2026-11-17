@@ -1,52 +1,77 @@
 import random
 
-random.seed(67)
+class Arbiter:
+    def __init__(self, rand_gen):
+        self.rand_gen = rand_gen
 
-def hol_dest(N):
-    entries = []
-    for _ in range(N):
-        entries.append(random.randrange(N))
+    def schedule(self, requests):
+        grants = {}
+        for out_port in requests.keys():
+            grants[out_port] = self.rand_gen.choice(requests[out_port])
+        return grants
 
-    return entries
+class Meter:
+    def __init__(self, N, warmup):
+        self.N = N
+        self.warmup = warmup
+        self.total = 0
+        self.counted_slots = 0
 
-def req_collector(entries):
-    dest = {} 
-    for i in range(len(entries)):
-        if entries[i] not in dest:
-            dest[entries[i]] = [i]
-            continue
-        dest[entries[i]].append(i)
+    def record(self, count, current_slot):
+        if current_slot >= self.warmup:
+            self.total += count
+            self.counted_slots += 1
+    
+    def report(self):
+        if self.counted_slots <= 0:
+            return 0.0
+        return self.total / (self.N * self.counted_slots)
 
-    return dest
+class Switch:
+    def __init__(self, N, slots, seed, warmup):
+        self.N = N
+        self.slots = slots
 
-def arbiter(dest):
-    final_dest = {}
-    for key in dest.keys():
-        rand_input = random.choice(dest[key])
-        final_dest[key] = rand_input
+        self.rand_gen = random.Random(seed)
 
-    return final_dest
+        self.arbiter = Arbiter(self.rand_gen)
+        # Meter no longer needs total slots passed to it
+        self.meter = Meter(N, warmup)
 
-def depart_refill(N, entries, dest):
-    for out in dest.keys():
-        entries[dest[out]] = random.randrange(N)
-    return len(dest)
+        self.hol = [self.rand_gen.randrange(N) for _ in range(N)]
 
-def slot_loop(N, slots):
-    warmup = 50
-    total = 0
-    entries = hol_dest(N)
-    for i in range(slots):
-        collected = req_collector(entries)
-        final_dest = arbiter(collected)
-        val = depart_refill(N, entries, final_dest)
-        if i >= warmup:
-            total += val 
+    def _build_requests(self):
+        requests = {}
+        for in_port, out_dest in enumerate(self.hol):
+            requests.setdefault(out_dest, []).append(in_port)
+        return requests
 
-    return total / (N * (slots-warmup))
-        
+    def step(self, current_slot):
+        # 1. Collect Requests
+        requests = self._build_requests()
+
+        # 2. Grant (Arbitration)
+        grants = self.arbiter.schedule(requests)
+
+        # 3. Depart and Refill
+        for out_port, in_port in grants.items():
+            self.hol[in_port] = self.rand_gen.randrange(self.N)
+
+        # 4. Record throughput
+        self.meter.record(len(grants), current_slot)
+
+    def run(self):
+        for i in range(self.slots):
+            self.step(i)
+        return self.meter.report()
 
 if __name__ == "__main__":
-    N = 32
+    test_cases = [2, 4, 8, 16, 32]
     slots = 100000
-    print(f"slots: {slots}, N = {N} and throughput = {slot_loop(N, slots)}")
+    seed = 67
+    warmup = 50
+
+    for N in test_cases:
+        sim = Switch(N, slots, seed, warmup)
+        throughput = sim.run()
+        print(f"slots: {slots}, N = {N:2d} and throughput = {throughput:.6f}")
