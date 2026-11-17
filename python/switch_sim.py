@@ -1,6 +1,6 @@
 import random
 
-random.seed(62)
+random.seed(67)
 
 def hol_dest(N):
     entries = []
@@ -19,8 +19,15 @@ def req_collector(entries):
 
     return dest
 
+def arbiter(dest):
+    for key in dest.keys():
+        rand_input = random.choice(dest[key])
+        dest[key] = rand_input
+
 if __name__ == "__main__":
     entries = hol_dest(4)
     collected = req_collector(entries)
     print(entries)
+    print(collected)
+    arbiter(collected)
     print(collected)
