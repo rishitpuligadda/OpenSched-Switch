@@ -20,9 +20,12 @@ def req_collector(entries):
     return dest
 
 def arbiter(dest):
+    final_dest = {}
     for key in dest.keys():
         rand_input = random.choice(dest[key])
-        dest[key] = rand_input
+        final_dest[key] = rand_input
+
+    return final_dest
 
 def depart_refill(N, entries, dest):
     for out in dest.keys():
@@ -32,9 +35,9 @@ if __name__ == "__main__":
     N = 4
     entries = hol_dest(N)
     collected = req_collector(entries)
+    final_dest = arbiter(collected)
     print(entries)
     print(collected)
-    arbiter(collected)
-    print(collected)
-    depart_refill(N, entries, collected)
+    print(final_dest)
+    depart_refill(N, entries, final_dest)
     print(entries)
