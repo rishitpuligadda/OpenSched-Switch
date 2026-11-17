@@ -30,6 +30,7 @@ def arbiter(dest):
 def depart_refill(N, entries, dest):
     for out in dest.keys():
         entries[dest[out]] = random.randrange(N)
+    return len(dest)
 
 if __name__ == "__main__":
     N = 4
@@ -39,5 +40,7 @@ if __name__ == "__main__":
     print(entries)
     print(collected)
     print(final_dest)
-    depart_refill(N, entries, final_dest)
+    dep_count = depart_refill(N, entries, final_dest)
     print(entries)
+    print(dep_count)
+    
