@@ -42,7 +42,7 @@ class Switch:
 
     def _build_requests(self):
         requests = {}
-        for in_port, out_dest in enumerate(self.hol):
+        for in_port, out_dest in enumerate(self.hol):       
             requests.setdefault(out_dest, []).append(in_port)
         return requests
 
@@ -65,13 +65,24 @@ class Switch:
             self.step(i)
         return self.meter.report()
 
+def arrivals(N, load):
+    arr_vals = {}
+    for i in range(N):
+        if random.random() < load:
+            arr_vals[i] = random.randrange(N)
+    return arr_vals
+
 if __name__ == "__main__":
     test_cases = [2, 4, 8, 16, 32]
     slots = 100000
     seed = 67
     warmup = 50
 
-    for N in test_cases:
-        sim = Switch(N, slots, seed, warmup)
-        throughput = sim.run()
-        print(f"slots: {slots}, N = {N:2d} and throughput = {throughput:.6f}")
+    #for N in test_cases:
+     #   sim = Switch(N, slots, seed, warmup)
+      #  throughput = sim.run()
+       # print(f"slots: {slots}, N = {N:2d} and throughput = {throughput:.6f}")
+
+    print(arrivals(4, 1.0))
+    print(arrivals(4, 0.5))
+    print(arrivals(4, 0.75))
