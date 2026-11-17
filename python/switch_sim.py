@@ -24,10 +24,17 @@ def arbiter(dest):
         rand_input = random.choice(dest[key])
         dest[key] = rand_input
 
+def depart_refill(N, entries, dest):
+    for out in dest.keys():
+        entries[dest[out]] = random.randrange(N)
+
 if __name__ == "__main__":
-    entries = hol_dest(4)
+    N = 4
+    entries = hol_dest(N)
     collected = req_collector(entries)
     print(entries)
     print(collected)
     arbiter(collected)
     print(collected)
+    depart_refill(N, entries, collected)
+    print(entries)
