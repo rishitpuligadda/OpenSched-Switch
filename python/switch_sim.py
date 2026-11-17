@@ -33,17 +33,20 @@ def depart_refill(N, entries, dest):
     return len(dest)
 
 def slot_loop(N, slots):
+    warmup = 50
     total = 0
     entries = hol_dest(N)
     for i in range(slots):
         collected = req_collector(entries)
         final_dest = arbiter(collected)
-        total += depart_refill(N, entries, final_dest)
+        val = depart_refill(N, entries, final_dest)
+        if i >= warmup:
+            total += val 
 
-    return total / (N * slots)
+    return total / (N * (slots-warmup))
         
 
 if __name__ == "__main__":
-    N = 16
-    slots = 1000
+    N = 32
+    slots = 100000
     print(f"slots: {slots}, N = {N} and throughput = {slot_loop(N, slots)}")
