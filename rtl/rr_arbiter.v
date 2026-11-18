@@ -7,31 +7,42 @@ module rr_arbiter #(
     input      [N-1:0]           req,
     output reg [N-1:0]           grant
 );
-	integer i;
-	integer idx;
-	reg     found;
+	reg [N-1:0] next_grant;
+	integer     idx;
+	integer     i;
+	reg         found;
 
-	always @(posedge clk or negedge rst_n) begin
-		if (!rst_n || ~|req) begin
-			grant <= {N{1'b0}};
+	always @(*) begin
+		next_grant = {N{1'b0}};
+		found      = 1'b0;
+
+		if (~|req) begin
+			next_grant = {N{1'b0}};
 		end
 		else if (req[ptr]) begin
-			grant <= {{(N-1){1'b0}}, 1'b1} << ptr;
+			next_grant = 1 << ptr;
 		end
 		else begin
-			found = 1'b0;
-			for (i = 1; i < N; i=i+1) begin
+			for (i = 1; i < N; i = i + 1) begin
 				idx = ptr + i;
-
 				if (idx >= N) begin
 					idx = idx - N;
 				end
 
 				if (!found && req[idx]) begin
-					grant <= {{(N-1){1'b0}}, 1'b1} << idx;
-					found = 1'b1;
+					next_grant = {{(N-1){1'b0}}, 1'b1} << idx;
+					found      = 1'b1;
 				end
 			end
+		end
+	end
+
+	always @(posedge clk or negedge rst_n) begin
+		if (!rst_n) begin
+			grant <= {N{1'b0}};
+		end
+		else begin
+			grant <= next_grant;
 		end
 	end
 endmodule
