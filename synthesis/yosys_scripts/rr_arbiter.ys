@@ -1,0 +1,11 @@
+read_verilog ../../rtl/rr_arbiter.v
+hierarchy -check -top rr_arbiter
+proc; opt; fsm; opt; memory; opt
+techmap; opt
+dfflibmap -liberty /foss/designs/sky130.lib
+abc -liberty /foss/designs/sky130.lib
+abc
+clean -purge
+stat
+show -format png -prefix ../schematic/rr_arbiter -colors 1
+write_verilog -noattr ../netlist/synth_rr_arbiter.v
