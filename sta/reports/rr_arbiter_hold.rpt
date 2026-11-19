@@ -1,0 +1,31 @@
+Warning 168: sta.tcl line 1, unknown field nets.
+Startpoint: ptr[1] (input port clocked by clk)
+Endpoint: _82_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            2.000    2.000 ^ input external delay
+    13    0.035    0.000    0.000    2.000 ^ ptr[1] (in)
+                   0.000    0.000    2.000 ^ _79_/A2 (sky130_fd_sc_hd__o32ai_1)
+     1    0.002    0.036    0.057    2.057 v _79_/Y (sky130_fd_sc_hd__o32ai_1)
+                   0.036    0.000    2.057 v _82_/D (sky130_fd_sc_hd__dfrtp_1)
+                                     2.057   data arrival time
+
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            0.250    0.250   clock uncertainty
+                            0.000    0.250   clock reconvergence pessimism
+                                     0.250 ^ _82_/CLK (sky130_fd_sc_hd__dfrtp_1)
+                           -0.052    0.198   library hold time
+                                     0.198   data required time
+---------------------------------------------------------------------------------
+                                     0.198   data required time
+                                    -2.057   data arrival time
+---------------------------------------------------------------------------------
+                                     1.859   slack (MET)
+
+
