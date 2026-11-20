@@ -1,0 +1,31 @@
+Warning 168: fifo.tcl line 1, unknown field nets.
+Startpoint: _244_ (rising edge-triggered flip-flop clocked by clk)
+Endpoint: _244_ (rising edge-triggered flip-flop clocked by clk)
+Path Group: clk
+Path Type: min
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                   0.000    0.000    0.000 ^ _244_/CLK (sky130_fd_sc_hd__dfrtp_1)
+     2    0.009    0.096    0.341    0.341 ^ _244_/Q (sky130_fd_sc_hd__dfrtp_1)
+                   0.096    0.000    0.341 ^ _173_/A (sky130_fd_sc_hd__xor2_1)
+     1    0.002    0.033    0.068    0.409 v _173_/X (sky130_fd_sc_hd__xor2_1)
+                   0.033    0.000    0.409 v _244_/D (sky130_fd_sc_hd__dfrtp_1)
+                                     0.409   data arrival time
+
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            0.250    0.250   clock uncertainty
+                            0.000    0.250   clock reconvergence pessimism
+                                     0.250 ^ _244_/CLK (sky130_fd_sc_hd__dfrtp_1)
+                           -0.051    0.199   library hold time
+                                     0.199   data required time
+---------------------------------------------------------------------------------
+                                     0.199   data required time
+                                    -0.409   data arrival time
+---------------------------------------------------------------------------------
+                                     0.210   slack (MET)
+
+

@@ -1,0 +1,30 @@
+Warning 168: fifo.tcl line 1, unknown field nets.
+Startpoint: wr_en (input port clocked by clk)
+Endpoint: overflow (output port clocked by clk)
+Path Group: clk
+Path Type: max
+
+Fanout      Cap     Slew    Delay     Time   Description
+---------------------------------------------------------------------------------
+                   0.000    0.000    0.000   clock clk (rise edge)
+                            0.000    0.000   clock network delay (ideal)
+                            2.000    2.000 v input external delay
+     2    0.004    0.000    0.000    2.000 v wr_en (in)
+                   0.000    0.000    2.000 v _179_/A (sky130_fd_sc_hd__and2_0)
+     1    0.000    0.021    0.087    2.087 v _179_/X (sky130_fd_sc_hd__and2_0)
+                   0.021    0.000    2.087 v overflow (out)
+                                     2.087   data arrival time
+
+                   0.000    5.000    5.000   clock clk (rise edge)
+                            0.000    5.000   clock network delay (ideal)
+                           -0.250    4.750   clock uncertainty
+                            0.000    4.750   clock reconvergence pessimism
+                           -2.000    2.750   output external delay
+                                     2.750   data required time
+---------------------------------------------------------------------------------
+                                     2.750   data required time
+                                    -2.087   data arrival time
+---------------------------------------------------------------------------------
+                                     0.663   slack (MET)
+
+
